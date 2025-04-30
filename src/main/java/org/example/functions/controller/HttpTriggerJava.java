@@ -52,7 +52,6 @@ public class HttpTriggerJava {
         } else {
             RestAPI restAPI = new RestAPI();
             if (Objects.equals(request.getHttpMethod().toString(), "POST")) {
-
                 return request.createResponseBuilder(HttpStatus.CREATED).header("Content-Type", "application/json").header("Sample", "function").body(restAPI.createNewUser()).build();
             } else {
                 return request.createResponseBuilder(HttpStatus.OK).header("Content-Type", "application/json").header("Sample", "function").body(restAPI.listUsers()).build();

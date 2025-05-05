@@ -1,11 +1,18 @@
 package org.example.functions.Authorization;
 
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
+import com.google.api.client.auth.oauth2.BearerToken;
+import com.google.api.client.auth.oauth2.StoredCredential;
 import com.google.api.client.extensions.appengine.auth.oauth2.AbstractAppEngineAuthorizationCodeServlet;
+import com.google.api.client.http.BasicAuthentication;
 import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.store.FileDataStoreFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -26,7 +33,16 @@ public class OAuth2 extends AbstractAppEngineAuthorizationCodeServlet {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        return null;
+        AuthorizationCodeFlow.Builder builder = new AuthorizationCodeFlow.Builder(BearerToken.authorizationHeaderAccessMethod(),
+                new NetHttpTransport(),
+                new JacksonFactory(),
+                new GenericUrl("xyz"),
+                new BasicAuthentication("abhishek","abhishek"),
+                "xyz",
+                "https://localhost:8081/authorize")
+                .setCredentialDataStore(StoredCredential.getDefaultDataStore
+                        (new FileDataStoreFactory(new File("credentials"))));
+        return builder.build();
     }
 
     @Override
